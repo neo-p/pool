@@ -4,6 +4,6 @@ namespace NeoP\Pool\Contract;
 
 interface PoolInterface
 {
-    public function release(&$node): bool;
-    public function node();
+    public function _release(&$node): bool;
+    public function _node();
 }

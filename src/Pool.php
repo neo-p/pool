@@ -50,33 +50,33 @@ abstract class Pool implements PoolInterface
      */
     protected $_maxConnect = 5;
 
-    public function pool($origin, int $maxConnect = 5, int $maxIdle = 5)
+    public function _pool($origin, int $maxConnect = 5, int $maxIdle = 5)
     {
         $this->_origin = $origin;
-        $this->setMaxConnect($maxConnect);
-        $this->setMaxIdle($maxIdle);
+        $this->_setMaxConnect($maxConnect);
+        $this->_setMaxIdle($maxIdle);
         $this->_pool = new Channel($this->_maxIdle);
     }
 
-    public function release(&$node): bool
+    public function _release(&$node): bool
     {
         if (is_object($node)) {
             if (! $this->_pool->isFull()) {
                 $this->_pool->push($node);
             } else {
                 unset($node);
-                $this->decr();
+                $this->_decr();
             }
             return true;
         }
         return false;
     }
 
-    public function node()
+    public function _node()
     {
-        if($this->_pool->isEmpty() && $this->length() < $this->maxConnect()) {
+        if($this->_pool->isEmpty() && $this->_length() < $this->_maxConnect()) {
             $node = clone $this->_origin;
-            $this->incr();
+            $this->_incr();
         } else {
             $node = $this->_pool->pop();
         }
@@ -84,39 +84,39 @@ abstract class Pool implements PoolInterface
         return $node;
     }
 
-    protected function setMaxConnect(int $maxConnect = 5) 
+    protected function _setMaxConnect(int $maxConnect = 5) 
     {
         $this->_maxConnect = $maxConnect;
     }
 
-    protected function setMaxIdle(int $maxIdle = 5)
+    protected function _setMaxIdle(int $maxIdle = 5)
     {
         $this->_maxIdle = $maxIdle;
     }
 
-    protected function length(): int
+    protected function _length(): int
     {
         return $this->length;
     }
 
-    protected function incr(int $step = 1)
+    protected function _incr(int $step = 1)
     {
         $this->length += $step;
     }
 
-    protected function decr(int $step = 1)
+    protected function _decr(int $step = 1)
     {
         $this->length -= $step;
     }
 
-    protected function maxConnect(): int
+    protected function _maxConnect(): int
     {
         return $this->_maxConnect;
     }
 
     public function __call($name, $arguments)
     {
-        $result = $this->node()->$name(...$arguments);
+        $result = $this->_node()->$name(...$arguments);
         return $result;
     }
 

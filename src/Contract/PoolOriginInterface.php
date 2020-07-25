@@ -3,5 +3,5 @@ namespace NeoP\Pool\Contract;
 
 interface PoolOriginInterface
 {
-    public function get(array $config, string $name): PoolInterface;
+    public function _get(array $config, string $name): PoolInterface;
 }

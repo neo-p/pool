@@ -24,7 +24,7 @@ class PoolHandler extends Handler
             if (! ($instance instanceof PoolOriginInterface)) {
                 throw new PoolException("Pool：". $this->className . ' is not implements ' . PoolOriginInterface::class);
             }
-            $instance->get($config, $name);
+            $instance->_get($config, $name);
         }
     }
 }
