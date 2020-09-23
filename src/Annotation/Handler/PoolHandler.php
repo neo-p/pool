@@ -6,7 +6,7 @@ use NeoP\DI\Container;
 use NeoP\Annotation\Annotation\Handler\Handler;
 use NeoP\Annotation\Annotation\Mapping\AnnotationHandler;
 use NeoP\Pool\Annotation\Mapping\Pool;
-use NeoP\Pool\Contract\PoolOriginInterface;
+use NeoP\Pool\Contract\PoolInterface;
 use NeoP\Pool\Exception\PoolException;
 use ReflectionClass;
 
@@ -21,10 +21,10 @@ class PoolHandler extends Handler
         $pools = service('pool.' . $type, []);
         foreach ($pools as $name => $config) {
             $instance = $reflection->newInstance();
-            if (! ($instance instanceof PoolOriginInterface)) {
-                throw new PoolException("Pool：". $this->className . ' is not implements ' . PoolOriginInterface::class);
+            if (! ($instance instanceof PoolInterface)) {
+                throw new PoolException("Pool：". $this->className . ' is not implements ' . PoolInterface::class);
             }
-            $instance->_get($config, $name);
+            $instance->_createPool($config, $name);
         }
     }
 }
